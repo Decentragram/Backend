@@ -27,5 +27,6 @@ const upload = multer({
 router.get("/", auth, PostController.getUserPosts);
 router.get("/feed", auth, PostController.getFeedPosts);
 router.post("/createPost", auth, upload.array("images", 10), PostController.createPost);
+router.post("/addComment/:id", auth, PostController.addComment);
 
 export default router;

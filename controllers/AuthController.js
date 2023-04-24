@@ -90,6 +90,12 @@ class AuthController {
       }
 
       let user = await User.findOne({ wallet_address: address });
+
+      if (!user) {
+        user = await User.create({
+          wallet_address: address,
+        });
+      }
       const access_token = JwtService.sign({ address, _id: user._id });
 
       if (!user) {

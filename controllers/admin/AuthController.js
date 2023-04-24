@@ -2,6 +2,7 @@ import catchAsync from "../../utils/catchAsync.js";
 import { ADMIN_PASSWORD, ADMIN_USERNAME } from "../../config";
 import User from "../../models/user.js";
 import Post from "../../models/Post.js";
+import Comment from "../../models/Comment.js";
 
 class AuthController {
   static getAllUsers = catchAsync(async (req, res, next) => {
@@ -23,7 +24,16 @@ class AuthController {
   });
 
   static getAllPosts = catchAsync(async (req, res, next) => {
-    const posts = await Post.find({}).populate("userId", "username profilePic");
+    const posts = await Post.find().populate("userId", "username profilePic").lean();
+
+    for (let i = 0; i < posts.length; i++) {
+      posts[i].commentsCount = await Comment.countDocuments({ postId: posts[i]._id });
+      posts[i].comments = await Comment.find({ postId: posts[i]._id })
+        .populate("userId", "username profilePic")
+        .lean();
+      posts[i].likesCount = posts[i].likes.length;
+    }
+
     res.status(200).json({
       success: true,
       data: posts,

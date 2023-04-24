@@ -3,6 +3,7 @@ import catchAsync from "../utils/catchAsync";
 import joi from "joi";
 import uploadFile from "../utils/cloudinary";
 import Post from "../models/Post";
+import Comment from "../models/Comment";
 
 class PostController {
   static createPost = catchAsync(async (req, res, next) => {
@@ -110,6 +111,57 @@ class PostController {
     res.status(200).json({
       success: true,
       data: posts,
+    });
+  });
+
+  static addComment = catchAsync(async (req, res, next) => {
+    let { comment } = req.body;
+    const { _id } = req.user;
+    const { id } = req.params;
+
+    const post = await Post.findById(id);
+
+    if (!post) {
+      return next(new CustomErrorHandler(400, "Post not found"));
+    }
+
+    const newComment = await Comment.create({
+      userId: _id,
+      postId: post._id,
+      comment,
+    });
+
+    console.log("newComment", newComment);
+
+    // if (req.user._id !== post.userId.toString()) {
+    //   await NotificationController.sendNotification(
+    //     _id,
+    //     post.userId,
+    //     "post",
+    //     "New Comment",
+    //     `${username ? username : "Someone"} has commented on your post`,
+    //     post._id
+    //   );
+    // }
+
+    // send notification to tagged users
+    return res.status(200).json({
+      success: true,
+      message: "Comment added successfully",
+      data: newComment,
+    });
+  });
+
+  static getComments = catchAsync(async (req, res, next) => {
+    const { id } = req.params;
+
+    const comments = await Comment.find({ postId: id })
+      .populate("userId", "username profilePic")
+      .lean();
+
+    return res.status(200).json({
+      success: true,
+      data: comments,
     });
   });
 }
