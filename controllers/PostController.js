@@ -93,6 +93,25 @@ class PostController {
       data: posts,
     });
   });
+
+  static getFeedPosts = catchAsync(async (req, res, next) => {
+    const { _id } = req.user;
+
+    const posts = await Post.find({}).populate("userId", "username profilePic").lean();
+
+    for (let i = 0; i < posts.length; i++) {
+      if (posts[i].likes.map(String).includes(_id)) {
+        posts[i].isLiked = true;
+      } else {
+        posts[i].isLiked = false;
+      }
+    }
+
+    res.status(200).json({
+      success: true,
+      data: posts,
+    });
+  });
 }
 
 export default PostController;
