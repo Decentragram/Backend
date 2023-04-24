@@ -304,7 +304,7 @@ class UserController {
       console.log("error==>", error);
     }
   });
-  static;
+  //   static;
 }
 
 export default UserController;
