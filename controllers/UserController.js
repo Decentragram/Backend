@@ -4,10 +4,12 @@ import catchAsync from "../utils/catchAsync";
 import CustomErrorHandler from "../utils/CustomErrorHandler";
 import Relation from "../models/relations";
 import Post from "../models/Post";
+import uploadFile from "../utils/cloudinary";
 
 class UserController {
   static editProfile = catchAsync(async (req, res, next) => {
     const { name, email, phone, dob, interests, username } = req.body;
+    const { path, mimetype, buffer } = req.file;
 
     if (!username || !name || !email || !phone || !dob) {
       return HelperResponse.error(res, "Please fill all fields", "invalid_fields");
@@ -31,6 +33,12 @@ class UserController {
 
     const { _id } = req.user;
 
+    const filedata = await uploadFile(buffer);
+
+    if (!filedata) {
+      return res.status(500).send("Error while uploading file. Try again later.");
+    }
+
     let user = await User.findByIdAndUpdate(
       {
         _id,
@@ -44,6 +52,7 @@ class UserController {
           interests,
           username,
           isOnboarding: false,
+          profilePic: filedata.secure_url,
         },
       },
       {

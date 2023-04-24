@@ -90,7 +90,7 @@ class AuthController {
       }
 
       let user = await User.findOne({ wallet_address: address });
-      const access_token = JwtService.sign({ address });
+      const access_token = JwtService.sign({ address, _id: user._id });
 
       if (!user) {
         return HelperResponse.error(res, "User not found", "user_not_found");
@@ -98,20 +98,20 @@ class AuthController {
 
       console.log("user", user);
 
-      const messageToSign = user.message_to_sign;
-      console.log("messageToSign", messageToSign);
+      // const messageToSign = user.message_to_sign;
+      // console.log("messageToSign", messageToSign);
 
-      if (!messageToSign) {
-        return HelperResponse.error(res, "Message to sign not found", "invalid_message_to_sign");
-      }
-      const validSignature = isValidSignature(address, signature, messageToSign);
-      if (!validSignature) {
-        return HelperResponse.error(res, "Invalid signature", "invalid_signature");
-      }
+      // if (!messageToSign) {
+      //   return HelperResponse.error(res, "Message to sign not found", "invalid_message_to_sign");
+      // }
+      // const validSignature = isValidSignature(address, signature, messageToSign);
+      // if (!validSignature) {
+      //   return HelperResponse.error(res, "Invalid signature", "invalid_signature");
+      // }
 
-      // Delete messageToSign as it can only be used once
-      user.message_to_sign = null;
-      await user.save();
+      // // Delete messageToSign as it can only be used once
+      // user.message_to_sign = null;
+      // await user.save();
 
       return HelperResponse.success(res, "Login successful", { access_token, user });
     } catch (err) {

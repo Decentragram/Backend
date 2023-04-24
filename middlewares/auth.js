@@ -14,8 +14,10 @@ const auth = catchAsync(async (req, res, next) => {
   try {
     const { _id } = await JwtService.verify(token);
 
+    console.log(_id);
+
     let user = await User.findById(_id);
-    // console.log(user);
+    console.log(user);
 
     req.user = {
       _id,

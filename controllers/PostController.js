@@ -1,6 +1,8 @@
 import CustomErrorHandler from "../utils/CustomErrorHandler";
 import catchAsync from "../utils/catchAsync";
 import joi from "joi";
+import uploadFile from "../utils/cloudinary";
+import Post from "../models/Post";
 
 class PostController {
   static createPost = catchAsync(async (req, res, next) => {
@@ -32,9 +34,21 @@ class PostController {
       let url;
       console.log(req.files, "files");
 
+      let filedata;
+
       if (req.files) {
         for (let i = 0; i < req.files.length; i++) {
           //   add logic to upload file and store in media array
+          filedata = await uploadFile(req.files[i].buffer);
+
+          if (!filedata) {
+            return res.status(500).send("Error while uploading file. Try again later.");
+          }
+
+          media.push({
+            url: filedata.secure_url,
+            type: req.files[i].mimetype,
+          });
         }
       }
       // console.log(media, "media");
@@ -66,4 +80,19 @@ class PostController {
       return next(new CustomErrorHandler(400, error.message));
     }
   });
+
+  static getUserPosts = catchAsync(async (req, res, next) => {
+    const { _id } = req.user;
+
+    const posts = await Post.find({
+      userId: _id,
+    }).populate("userId", "username profilePic");
+
+    res.status(200).json({
+      success: true,
+      data: posts,
+    });
+  });
 }
+
+export default PostController;
