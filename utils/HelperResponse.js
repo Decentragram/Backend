@@ -8,6 +8,7 @@ class HelperResponse {
   }
 
   static async error(res, message, error = {}) {
+    console.log("error", message, error);
     return res.status(400).json({
       success: false,
       message,

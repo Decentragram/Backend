@@ -23,11 +23,13 @@ const isValidSignature = (address, signature, messageToSign) => {
   if (!address || typeof address !== "string" || !signature || !messageToSign) {
     return false;
   }
-
+  console.log(messageToSign, "lodu", signature);
   const signingAddress = recoverPersonalSignature({
     data: messageToSign,
     signature,
   });
+
+  console.log("signingAddress", signingAddress);
 
   if (!signingAddress || typeof signingAddress !== "string") {
     return false;
@@ -39,7 +41,7 @@ class AuthController {
   static getMessageToSign = catchAsync(async (req, res, next) => {
     try {
       const { address } = req.query;
-
+      console.log(address);
       if (!isValidEthAddress(address)) {
         return HelperResponse.error(res, "Invalid Ethereum address", "invalid__address");
       }
@@ -76,6 +78,9 @@ class AuthController {
     try {
       const { address, signature } = req.body;
 
+      console.log("address", address);
+      console.log("signature", signature);
+
       if (!isValidEthAddress(address) || !signature) {
         return HelperResponse.error(
           res,
@@ -94,19 +99,18 @@ class AuthController {
       console.log("user", user);
 
       const messageToSign = user.message_to_sign;
+      console.log("messageToSign", messageToSign);
 
       if (!messageToSign) {
         return HelperResponse.error(res, "Message to sign not found", "invalid_message_to_sign");
       }
-
       const validSignature = isValidSignature(address, signature, messageToSign);
-
       if (!validSignature) {
         return HelperResponse.error(res, "Invalid signature", "invalid_signature");
       }
 
       // Delete messageToSign as it can only be used once
-      user.messageToSign = null;
+      user.message_to_sign = null;
       await user.save();
 
       return HelperResponse.success(res, "Login successful", { access_token, user });

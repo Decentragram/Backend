@@ -30,7 +30,7 @@ app.get("/", (req, res) => {
 
 app.use("/api", router);
 
-app.use(errorHandler);
+// app.use(errorHandler);
 
 const server = app.listen(PORT, () => {
   console.log("server is running on port " + PORT);
