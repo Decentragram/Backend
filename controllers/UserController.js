@@ -9,11 +9,13 @@ import uploadFile from "../utils/cloudinary";
 class UserController {
   static editProfile = catchAsync(async (req, res, next) => {
     const { name, email, phone, dob, interests, username } = req.body;
-    const { path, mimetype, buffer } = req.file;
+    // const { path, mimetype, buffer } = req.file;
 
-    if (!username || !name || !email || !phone || !dob) {
-      return HelperResponse.error(res, "Please fill all fields", "invalid_fields");
-    }
+    // if (!username || !name || !email || !phone || !dob) {
+    //   return HelperResponse.error(res, "Please fill all fields", "invalid_fields");
+    // }
+
+    console.log(req.body, "body");
 
     if (username.length < 3) {
       return HelperResponse.error(
@@ -33,11 +35,11 @@ class UserController {
 
     const { _id } = req.user;
 
-    const filedata = await uploadFile(buffer);
+    // const filedata = await uploadFile(buffer);
 
-    if (!filedata) {
-      return res.status(500).send("Error while uploading file. Try again later.");
-    }
+    // if (!filedata) {
+    //   return res.status(500).send("Error while uploading file. Try again later.");
+    // }
 
     let user = await User.findByIdAndUpdate(
       {
@@ -52,7 +54,7 @@ class UserController {
           interests,
           username,
           isOnboarding: false,
-          profilePic: filedata.secure_url,
+          //   profilePic: filedata.secure_url,
         },
       },
       {
