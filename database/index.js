@@ -8,6 +8,7 @@ const opts = {
 };
 
 const connectToDB = () => {
+
   if (NODE_ENV === "production") {
     mongoose.connect(DB_URL, opts, () => {
       console.log("Connected to PROD_DB_URL");

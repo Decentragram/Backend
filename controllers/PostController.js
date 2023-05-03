@@ -10,7 +10,8 @@ class PostController {
     try {
       const { _id, username } = req.user;
       let { caption, tags } = req.body;
-
+      console.log(req.body,'bodycreatepost')
+      tags=tags.join(',')
       const schema = joi.object({
         caption: joi.string(),
         //   visibility: joi.string().valid("public", "followers"),
@@ -20,7 +21,7 @@ class PostController {
         //   type: joi.string().valid("post", "repost"),
         //   parentPost: joi.string(),
       });
-
+console.log(tags,caption,'atgs')
       const { error } = schema.validate({ caption, tags });
       if (error) {
         return next(new CustomErrorHandler(400, error.details[0].message));
@@ -108,6 +109,16 @@ class PostController {
       }
     }
 
+    res.status(200).json({
+      success: true,
+      data: posts,
+    });
+  });
+
+  static getFeedPostsGuest = catchAsync(async (req, res, next) => {
+
+    const posts = await Post.find({}).populate("userId", "username profilePic").lean();
+    
     res.status(200).json({
       success: true,
       data: posts,
