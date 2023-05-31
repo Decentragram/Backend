@@ -10,8 +10,8 @@ class PostController {
     try {
       const { _id, username } = req.user;
       let { caption, tags } = req.body;
-      console.log(req.body,'bodycreatepost')
-      tags=tags.join(',')
+      console.log(req.body, "bodycreatepost");
+      tags = tags.join(",");
       const schema = joi.object({
         caption: joi.string(),
         //   visibility: joi.string().valid("public", "followers"),
@@ -21,7 +21,7 @@ class PostController {
         //   type: joi.string().valid("post", "repost"),
         //   parentPost: joi.string(),
       });
-console.log(tags,caption,'atgs')
+
       const { error } = schema.validate({ caption, tags });
       if (error) {
         return next(new CustomErrorHandler(400, error.details[0].message));
@@ -44,7 +44,9 @@ console.log(tags,caption,'atgs')
           filedata = await uploadFile(req.files[i].buffer);
 
           if (!filedata) {
-            return res.status(500).send("Error while uploading file. Try again later.");
+            return res
+              .status(500)
+              .send("Error while uploading file. Try again later.");
           }
 
           media.push({
@@ -99,7 +101,9 @@ console.log(tags,caption,'atgs')
   static getFeedPosts = catchAsync(async (req, res, next) => {
     const { _id } = req.user;
 
-    const posts = await Post.find({}).populate("userId", "username profilePic").lean();
+    const posts = await Post.find({})
+      .populate("userId", "username profilePic")
+      .lean();
 
     for (let i = 0; i < posts.length; i++) {
       if (posts[i].likes.map(String).includes(_id)) {
@@ -116,9 +120,10 @@ console.log(tags,caption,'atgs')
   });
 
   static getFeedPostsGuest = catchAsync(async (req, res, next) => {
+    const posts = await Post.find({})
+      .populate("userId", "username profilePic")
+      .lean();
 
-    const posts = await Post.find({}).populate("userId", "username profilePic").lean();
-    
     res.status(200).json({
       success: true,
       data: posts,
