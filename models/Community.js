@@ -24,6 +24,51 @@ const communitySchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
+  posts: [
+    {
+      userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+      media: [Object],
+      caption: {
+        type: String,
+        maxlength: 2000,
+      },
+      likes: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+          default: [],
+        },
+      ],
+      tags: {
+        type: [String],
+      },
+      views: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+        },
+      ],
+      hidden: {
+        type: Boolean,
+        default: false,
+      },
+      deleted: {
+        type: Boolean,
+        default: false,
+      },
+      archived: {
+        type: Boolean,
+        default: false,
+      },
+      edited: {
+        type: Boolean,
+        default: false,
+      },
+    },
+  ],
 });
 
 const Community = mongoose.model("Community", communitySchema);

@@ -41,5 +41,10 @@ router.post(
 
 router.get("/getAllCommunities", auth, CommunityController.getAllCommunity);
 router.get("/getCommunities/:id", auth, CommunityController.getCommunityById);
+router.get(
+  "/getJoinedCommunities",
+  auth,
+  CommunityController.getJoinedCommunities
+);
 
 export default router;

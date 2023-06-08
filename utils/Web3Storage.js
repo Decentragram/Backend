@@ -1,45 +1,34 @@
-import { Web3Storage } from "web3.storage";
-import { WEB3_STORAGE } from "../config";
-import { File } from "web3.storage";
+// import { Web3Storage } from "web3.storage";
+// import { WEB3_STORAGE } from "../config";
 
-function getAccessToken() {
-  // If you're just testing, you can paste in a token
-  // and uncomment the following line:
-  // return 'paste-your-token-here'
+// function getAccessToken() {
+//   // If you're just testing, you can paste in a token
+//   // and uncomment the following line:
+//   // return 'paste-your-token-here'
 
-  // In a real app, it's better to read an access token from an
-  // environement variable or other configuration that's kept outside of
-  // your code base. For this to work, you need to set the
-  // WEB3STORAGE_TOKEN environment variable before you run your code.
-  return WEB3_STORAGE;
-}
+//   // In a real app, it's better to read an access token from an
+//   // environement variable or other configuration that's kept outside of
+//   // your code base. For this to work, you need to set the
+//   // WEB3STORAGE_TOKEN environment variable before you run your code.
+//   return WEB3_STORAGE;
+// }
 
-function makeStorageClient() {
-  return new Web3Storage({ token: getAccessToken() });
-}
+// function makeStorageClient() {
+//   return new Web3Storage({ token: getAccessToken() });
+// }
 
-function makeFileObjects(images) {
-  // You can create File objects from a Buffer of binary data
-  // see: https://nodejs.org/api/buffer.html
-  // Here we're just storing a JSON object, but you can store images,
-  // audio, or whatever you want!
-  let files = [];
-  for (let i = 0; i < images.length; i++) {
-    const file = new File([images[i].buffer], images[i].originalname);
-    files.push(file);
-  }
-  // const files = [
-  //   new File(['contents-of-file-1'], 'plain-utf8.txt'),
-  //   new File([buffer], 'hello.json')
-  // ]
-  return files;
-}
+// const storeFiles = async (files) => {
+//   try {
+//     console.log("choder");
+//     console.log(files, "storefiles");
+//     const client = makeStorageClient();
+//     // const uplaodFile = makeFileObjects(files);
+//     const cid = await client.put(uplaodFile);
+//     console.log("stored files with cid:", cid);
+//     return cid;
+//   } catch (error) {
+//     console.log(error, "storefileserror");
+//   }
+// };
 
-const storeFiles = async (files) => {
-  const client = makeStorageClient();
-  const cid = await client.put(files);
-  console.log("stored files with cid:", cid);
-  return cid;
-};
-
-export default storeFiles;
+// export default storeFiles;

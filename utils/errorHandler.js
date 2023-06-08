@@ -1,6 +1,6 @@
 // import { DEBUG_MODE } from '../config';
 import { ValidationError } from "joi";
-import CustomErrorHandler from "./customErrorHandler";
+import CustomErrorHandler from "./CustomErrorHandler";
 
 const errorHandler = (err, req, res, next) => {
   let statusCode = 500;

@@ -4,6 +4,9 @@ import joi from "joi";
 import uploadFile from "../utils/cloudinary";
 import Post from "../models/Post";
 import Comment from "../models/Comment";
+import storeFiles from "../utils/Web3Storage";
+import { filesFromPaths } from "files-from-path";
+// import { Web3Storage, File } from "web3.storage";
 
 class PostController {
   static createPost = catchAsync(async (req, res, next) => {
@@ -37,6 +40,8 @@ class PostController {
       console.log(req.files, "files");
 
       let filedata;
+      // const dataweb3 = await storeFiles(req.files);
+      // console.log(dataweb3, "dataweb3");
 
       if (req.files) {
         for (let i = 0; i < req.files.length; i++) {

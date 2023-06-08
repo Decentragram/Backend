@@ -96,7 +96,10 @@ class CommunityController {
     });
 
     if (isAlreadyJoined) {
-      return next(new CustomErrorHandler(400, "Already joined"));
+      return res.status(200).json({
+        success: true,
+        message: "Already joined",
+      });
     }
 
     const updatedCommunity = await Community.findByIdAndUpdate(
@@ -117,6 +120,19 @@ class CommunityController {
       success: true,
       data: updatedCommunity,
     });
+  });
+
+  static getJoinedCommunities = catchAsync(async (req, res, next) => {
+    try {
+      const { _id } = req.user;
+      const communities = await Community.find({ members: { $in: [_id] } });
+      res.status(200).json({
+        success: true,
+        data: communities,
+      });
+    } catch (error) {
+      return next(new CustomErrorHandler(400, "Internal Server Error"));
+    }
   });
 }
 

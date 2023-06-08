@@ -1,6 +1,8 @@
 import dotenv from "dotenv";
 
-dotenv.config(process.env.NODE_ENV === "production" ? { path: ".env" } : { path: ".env" });
+dotenv.config(
+  process.env.NODE_ENV === "production" ? { path: ".env" } : { path: ".env" }
+);
 
 export const {
   PORT,
@@ -13,4 +15,5 @@ export const {
   CLOUDINARY_SECRET,
   ADMIN_PASSWORD,
   ADMIN_USERNAME,
+  WEB3_STORAGE,
 } = process.env;
