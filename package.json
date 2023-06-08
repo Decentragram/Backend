@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@metamask/eth-sig-util": "^5.0.2",
+    "@nomicfoundation/hardhat-toolbox": "^3.0.0",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.36.1",
     "cors": "^2.8.5",
@@ -29,6 +30,7 @@
     "web3.storage": "^4.5.4"
   },
   "devDependencies": {
+    "hardhat": "^2.15.0",
     "nodemon": "^2.0.21"
   }
 }
