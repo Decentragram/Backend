@@ -33,6 +33,12 @@ router.post(
   CommunityController.createCommunity
 );
 router.post(
+  "/createCommunityPost",
+  auth,
+  upload.array("images", 10),
+  CommunityController.createCommunityPost
+);
+router.post(
   "/joinCommunity/:id",
   auth,
 

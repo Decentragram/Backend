@@ -4,8 +4,7 @@ import joi from "joi";
 import uploadFile from "../utils/cloudinary";
 import Post from "../models/Post";
 import Comment from "../models/Comment";
-import storeFiles from "../utils/Web3Storage";
-import { filesFromPaths } from "files-from-path";
+
 // import { Web3Storage, File } from "web3.storage";
 
 class PostController {

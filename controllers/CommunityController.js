@@ -60,6 +60,75 @@ class CommunityController {
     }
   });
 
+  static createCommunityPost = catchAsync(async (req, res, next) => {
+    try {
+      const { _id } = req.user;
+      let { caption, tags, community_id } = req.body;
+      // let _id = "6446e95f938c2cc063302e4d";
+      console.log(req.body, "bodycreatepost", req.files);
+      tags = tags.join(",");
+      const schema = joi.object({
+        caption: joi.string(),
+
+        tags: joi.string(),
+      });
+      const { error } = schema.validate({ caption, tags });
+      if (error) {
+        return next(new CustomErrorHandler(400, error.details[0].message));
+      }
+
+      let media = [];
+      let filedata;
+
+      if (req.files) {
+        for (let i = 0; i < req.files.length; i++) {
+          //   add logic to upload file and store in media array
+          filedata = await uploadFile(req.files[i].buffer);
+
+          if (!filedata) {
+            return res
+              .status(500)
+              .send("Error while uploading file. Try again later.");
+          }
+
+          media.push({
+            url: filedata.secure_url,
+            type: req.files[i].mimetype,
+          });
+        }
+      }
+
+      tags = tags.split(",");
+
+      for (let i = 0; i < tags.length; i++) {
+        tags[i] = String(tags[i]).slice(1).toLowerCase();
+      }
+
+      // Logic for tagged users
+
+      const newPost = await Community.updateOne(
+        { _id: community_id },
+        {
+          $push: {
+            posts: {
+              userId: _id,
+              caption,
+              tags,
+              media,
+            },
+          },
+        }
+      );
+
+      res.status(201).json({
+        success: true,
+        data: newPost,
+      });
+    } catch (error) {
+      return next(new CustomErrorHandler(400, error.message));
+    }
+  });
+
   static getAllCommunity = catchAsync(async (req, res, next) => {
     const communities = await Community.find({});
 
