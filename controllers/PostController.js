@@ -123,6 +123,37 @@ class PostController {
     });
   });
 
+  static addLike = catchAsync(async (req, res, next) => {
+    const { _id } = req.user;
+    const { id } = req.params;
+
+    const post = await Post.findById(id);
+
+    if (!post) {
+      return next(new CustomErrorHandler(400, "Post not found"));
+    }
+
+    if (post.likes.map(String).includes(_id)) {
+      post.likes.pull(_id);
+      await post.save();
+
+      return res.status(200).json({
+        success: true,
+        message: "Like deleted successfully",
+        data: post,
+      });
+    } else {
+      post.likes.push(_id);
+      await post.save();
+
+      return res.status(200).json({
+        success: true,
+        message: "Like added successfully",
+        data: post,
+      });
+    }
+  });
+
   static getFeedPostsGuest = catchAsync(async (req, res, next) => {
     const posts = await Post.find({})
       .populate("userId", "username profilePic")

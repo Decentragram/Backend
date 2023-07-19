@@ -17,7 +17,9 @@ const upload = multer({
   fileFilter(req, file, cb) {
     if (!file.originalname.match(/\.(jpeg|jpg|png|pdf|doc|docx|xlsx|xls)$/)) {
       return cb(
-        new Error("only upload files with jpg, jpeg, png, pdf, doc, docx, xslx, xls format.")
+        new Error(
+          "only upload files with jpg, jpeg, png, pdf, doc, docx, xslx, xls format."
+        )
       );
     }
     cb(undefined, true); // continue with upload
@@ -27,7 +29,13 @@ const upload = multer({
 router.get("/", auth, PostController.getUserPosts);
 router.get("/feed", auth, PostController.getFeedPosts);
 router.get("/feedguest", PostController.getFeedPostsGuest);
-router.post("/createPost", auth, upload.array("images", 10), PostController.createPost);
+router.post(
+  "/createPost",
+  auth,
+  upload.array("images", 10),
+  PostController.createPost
+);
 router.post("/addComment/:id", auth, PostController.addComment);
+router.post("/like/:id", auth, PostController.addLike);
 
 export default router;
