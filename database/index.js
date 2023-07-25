@@ -8,13 +8,12 @@ const opts = {
 };
 
 const connectToDB = () => {
-
   if (NODE_ENV === "production") {
     mongoose.connect(DB_URL, opts, () => {
       console.log("Connected to PROD_DB_URL");
     });
   } else if (NODE_ENV === "development") {
-    mongoose.connect(TEST_DB_URL, opts, () => {
+    mongoose.connect(DB_URL, opts, () => {
       console.log("Connected to TEST_DB_URL");
     });
   }

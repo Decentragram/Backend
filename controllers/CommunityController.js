@@ -105,8 +105,8 @@ class CommunityController {
       }
 
       // Logic for tagged users
-
-      const newPost = await Community.updateOne(
+      console.log(community_id);
+      const newPost = await Community.findByIdAndUpdate(
         { _id: community_id },
         {
           $push: {
@@ -120,7 +120,7 @@ class CommunityController {
         }
       );
 
-      res.status(201).json({
+      return res.status(200).json({
         success: true,
         data: newPost,
       });
@@ -142,6 +142,7 @@ class CommunityController {
     const { id } = req.params;
 
     const community = await Community.findById(id);
+    console.log(community);
 
     res.status(200).json({
       success: true,
